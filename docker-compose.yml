@@ -1,0 +1,14 @@
+version: '2'
+services:
+  mongodb:
+    image: mongo:3.4
+    ports:
+      - "27017:27017"
+    command: mongod --smallfiles
+  spring-boot-k8:
+    build: .
+    image: spring-boot-k8
+    ports:
+      - "9085:9085"
+    links:
+         - mongodb
