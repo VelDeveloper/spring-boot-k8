@@ -11,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -57,6 +59,8 @@ public class PersonDTOControllerTest {
         PersonDTO personDTO = createPersonDTO("25");
         Person person = createPerson("25");
         when(personRepository.insert(personDTO)).thenReturn(personDTO);
+        Map<String,String> headers = new HashMap<>();
+        headers.put("getHeaders","getHeaders");
         Person resultResponse = personController.createPerson(person);
         verify(personRepository).insert(personDTO);
         //assertThat(resultResponse.getId(),is("25"));
@@ -85,7 +89,7 @@ public class PersonDTOControllerTest {
                 .age(25)
                 .personUid("personUid")
                 .firstName("Vadivel")
-                .id(id)
+                .personId(id)
                 .lastName("Murugan")
                 .sex("Male")
                 .build();

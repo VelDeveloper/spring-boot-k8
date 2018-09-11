@@ -1,6 +1,7 @@
 package com.sample.kubernetes.repository;
 
 import com.sample.kubernetes.model.PersonDTO;
+import com.sample.kubernetes.view.Person;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
