@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.8.RELEASE</version>
+		<version>1.5.10.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -27,6 +27,8 @@
 		<modelmapper.version>1.1.0</modelmapper.version>
 		<unit-tests.skip>false</unit-tests.skip>
 		<integration-tests.skip>true</integration-tests.skip>
+		<validation-api.version>2.0.1.Final</validation-api.version>
+		<hibernate-validator.version>6.0.13.Final</hibernate-validator.version>
 	</properties>
 
 	<dependencies>
@@ -95,6 +97,31 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.10.19</version>
+		</dependency>
+		<dependency>
+			<groupId>de.escalon.hypermedia</groupId>
+			<artifactId>spring-hateoas-ext</artifactId>
+			<version>0.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validation-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>${hibernate-validator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>0.25.0.RELEASE</version>
 		</dependency>
 	</dependencies>
 

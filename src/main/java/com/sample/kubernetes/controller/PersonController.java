@@ -5,15 +5,24 @@ import com.sample.kubernetes.repository.PersonRepository;
 import com.sample.kubernetes.view.Person;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static de.escalon.hypermedia.spring.AffordanceBuilder.linkTo;
+import static de.escalon.hypermedia.spring.AffordanceBuilder.methodOn;
+
+//
+//import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+//import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * Created by vadivel on 01/10/17.
@@ -31,21 +40,54 @@ public class PersonController {
         return personRepository.findAll();
     }
 
-    @GetMapping(value = "/getAllPersonHal")
-    public ResponseEntity<List<Person>> getPersonListHal(){
+    @GetMapping(value = "/getAllPersonHal",produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<Resources<Resource<Person>>> getPersonListHal(){
         List<PersonDTO> allPersons = personRepository.findAll();
-        List<Person> personList = new ArrayList<>();
+        List<Resource<Person>> personList = new ArrayList<>();
         for (PersonDTO personDTO : allPersons) {
             Person person = new Person();
             modelMapper.map(personDTO,person);
-            person.add(linkTo(methodOn(PersonController.class).getPersonById(personDTO.getId())).withSelfRel());
-            person.add(linkTo(methodOn(PersonController.class).getPersonById(personDTO.getId())).withRel("persons"));
-            person.add(linkTo(methodOn(PersonController.class)
-                    .getPersonById(personDTO.getId()))
-                    .withRel("urn:persons"));
-            personList.add(person);
+            Resource<Person> resource = new Resource<>(person,getLinks(personDTO.getId()));
+//            person.add(linkTo(methodOn(PersonController.class).getPersonById(personDTO.getId())).withSelfRel());
+//            person.add(linkTo(methodOn(PersonController.class).getPersonById(personDTO.getId())).withRel("persons"));
+//            person.add(linkTo(methodOn(PersonController.class)
+//                    .getPersonById(personDTO.getId()))
+//                    .withRel("urn:persons"));
+            personList.add(resource);
         }
+//        Resources<Person> resources = new Resources<>(personList);
+//        resources.add(getLinks("sample"));
+        return new ResponseEntity<>(new Resources<>(personList), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getAllPersonHals",produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<List<Resource<Person>>> getPersonListHals(){
+        List<PersonDTO> allPersons = personRepository.findAll();
+        List<Resource<Person>> personList = new ArrayList<>();
+        for (PersonDTO personDTO : allPersons) {
+            Person person = new Person();
+            modelMapper.map(personDTO,person);
+            Resource<Person> resource = new Resource<>(person,getLinks(personDTO.getId()));
+//            person.add(linkTo(methodOn(PersonController.class).getPersonById(personDTO.getId())).withType(MediaTypes.HAL_JSON_VALUE).withLinkParam("method","GET").withSelfRel());
+//            person.add(linkTo(methodOn(PersonController.class).getPersonById(personDTO.getId())).withType(MediaTypes.HAL_JSON_VALUE).withLinkParam("method","GET").withRel("persons"));
+//            person.add(linkTo(methodOn(PersonController.class)
+//                    .getPersonById(personDTO.getId()))
+//                    .withType(MediaTypes.HAL_JSON_VALUE).withLinkParam("method","GET")
+//                    .withRel("urn:persons"));
+            personList.add(resource);
+        }
+//        Resources<Person> resources = new Resources<>(personList);
+//        resources.add(getLinks("sample"));
         return new ResponseEntity<>(personList, HttpStatus.OK);
+    }
+
+
+
+    private List<Link> getLinks(String id) {
+        return Arrays.asList(
+                linkTo((methodOn(PersonController.class).getPersonById("sample"))).withType(MediaTypes.HAL_JSON_VALUE).withLinkParam("method","GET").withRel("people"),
+                linkTo((methodOn(PersonController.class).getPersonById("sample"))).withType(MediaTypes.HAL_JSON_VALUE).withLinkParam("method","GET").withRel("people"),
+                linkTo(methodOn(PersonController.class).getPersonById(id)).withSelfRel());
     }
 
     @GetMapping(value = "/getPersonById/{id}")

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.ResourceSupport;
 
-public class Greeting extends ResourceSupport {
+public class Greeting {
 
     private final String content;
 
@@ -16,4 +16,5 @@ public class Greeting extends ResourceSupport {
     public String getContent() {
         return content;
     }
+
 }
