@@ -1,10 +1,14 @@
 package com.sample.kubernetes.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
-public class Greeting {
+import java.util.List;
+
+public class Greeting extends ResourceSupport {
 
     private final String content;
 

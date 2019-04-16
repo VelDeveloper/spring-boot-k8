@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,14 +82,12 @@ public class HelloController {
     }
 
     @GetMapping("/greeting")
-    public ResponseEntity<Resource<Greeting>> greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
+    public ResponseEntity<Greeting> greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
         Greeting greeting = new Greeting(String.format("Hello, %s!", name));
-        Resource<Greeting> greetingResource = new Resource<>(greeting);
-
-        greetingResource.add(linkTo(methodOn(HelloController.class).greeting(name)).withSelfRel());
+        greeting.add(linkTo(methodOn(HelloController.class).greeting(name)).withSelfRel());
 //        Link link = new Link("http://localhost:8080/something").withRel("ACTIONS").expand();
 //        SuperLink superLink = new SuperLink(link, MediaTypes.HAL_JSON_VALUE,"GET","/v1/books","v1/describedBy");
 //        greeting.add(superLink);
-        return new ResponseEntity<>(greetingResource, HttpStatus.OK);
+        return new ResponseEntity<>(greeting, HttpStatus.OK);
     }
 }
